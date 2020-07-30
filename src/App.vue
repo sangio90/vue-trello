@@ -1,28 +1,57 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>My Trello</h1>
+    <div style="display: flex; justify-content: space-evenly">
+      <task-list @salva="stoSalvando" v-for="(element, index) in lists" :title="element.name" :key="index"></task-list>
+    </div>
+    <br>
+    <h3>In totale ci sono {{ counter }} task</h3>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import TaskList from "./components/TaskList";
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    TaskList
+  },
+  data () {
+    return {
+      lists: [
+        {
+          name: 'Todo',
+          tasks: [],
+        },
+        {
+          name: 'Doing',
+          tasks: [],
+        },
+        {
+          name: 'Done',
+          tasks: [],
+        }
+      ]
+    }
+  },
+  methods: {
+    stoSalvando () {
+      console.log('hei sto salvando')
+    }
+  },
+  computed: {
+    counter () {
+      return this.$store.state.count
+    }
+  },
+  created () {
+    let tasks = localStorage.getItem('tasks')
+    tasks = JSON.parse(tasks) || {}
+    let counter = 0
+    for (const taskList in tasks) {
+      counter += tasks[taskList].length
+    }
+    this.$store.commit('setCount', counter)
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
