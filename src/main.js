@@ -61,7 +61,9 @@ const store = new Vuex.Store({
         })
       }
     },
-    updateTask(state, id, title) {
+    updateTask(state, options) {
+      const id = options.id
+      const title = options.title
       state.taskLists.forEach((taskList) => {
         taskList.tasks.forEach((task) => {
           if (task.id === id) {

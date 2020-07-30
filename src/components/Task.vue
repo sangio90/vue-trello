@@ -1,7 +1,7 @@
 <template>
     <div>
         <input v-model="selected" type="checkbox"/>
-        <input v-model="titolo" @keypress="updateTask"/>
+        <input v-model="titolo" />
         <button @click="eliminaTask">Elimina</button>
         <button @click="salvaTask(taskId)">Salva</button>
     </div>
@@ -16,16 +16,24 @@
             }
         },
         computed: {
-            titolo () {
-                let titolo = ''
-                this.$store.state.taskLists.forEach((taskList) => {
-                    taskList.tasks.forEach((task) => {
-                        if (task.id === this.taskId) {
-                            titolo = task.title
-                        }
+            titolo:{
+                get () {
+                    let titolo = ''
+                    this.$store.state.taskLists.forEach((taskList) => {
+                        taskList.tasks.forEach((task) => {
+                            if (task.id === this.taskId) {
+                                titolo = task.title
+                            }
+                        })
+                    });
+                    return titolo
+                },
+                set (newValue) {
+                    this.$store.commit('updateTask', {
+                        id: this.taskId,
+                        title: newValue
                     })
-                });
-                return titolo
+                }
             }
         },
         props: {
@@ -38,9 +46,6 @@
             eliminaTask () {
                 this.$store.commit('deleteTask', this.taskId)
                 this.$store.commit('decrement')
-            },
-            updateTask () {
-                console.log('here')
             }
         }
     }
