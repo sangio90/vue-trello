@@ -86,9 +86,24 @@ const store = new Vuex.Store({
         }
       });
     },
-    // moveTask(state, id, destinationTaskListName) {
-    //
-    // }
+    moveTask(state, options) {
+      const id = options.id
+      const destinationTaskListName = options.destinationTaskListName
+      let taskToBeMoved = {}
+      let indexToBeMoved = undefined
+      state.taskLists.forEach((taskList) => {
+        indexToBeMoved = taskList.tasks.findIndex(function(element) {
+          return element.id === id;
+        })
+        if (indexToBeMoved > -1) {
+          taskToBeMoved = taskList.tasks.splice(indexToBeMoved, 1)[0]
+          const listIndex = state.taskLists.findIndex(function (element) {
+            return element.name === destinationTaskListName
+          })
+          return state.taskLists[listIndex].tasks.push(taskToBeMoved)
+        }
+      })
+    }
   }
 })
 
