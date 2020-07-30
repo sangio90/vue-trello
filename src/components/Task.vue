@@ -3,7 +3,7 @@
         <input v-model="selected" type="checkbox"/>
         <input v-model="titolo" />
         <button @click="eliminaTask">Elimina</button>
-        <button @click="salvaTask(taskId)">Salva</button>
+        <button @click="persistTaskLists">Salva</button>
     </div>
 </template>
 
@@ -46,6 +46,12 @@
             eliminaTask () {
                 this.$store.commit('deleteTask', this.taskId)
                 this.$store.commit('decrement')
+                this.persistTaskLists()
+            },
+            persistTaskLists () {
+                const taskLists = this.$store.state.taskLists
+                const taskListsToJson = JSON.stringify(taskLists)
+                localStorage.setItem('taskLists', taskListsToJson)
             }
         }
     }

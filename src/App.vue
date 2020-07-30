@@ -30,13 +30,17 @@ export default {
     }
   },
   created () {
-    // let tasks = localStorage.getItem('tasks')
-    // tasks = JSON.parse(tasks) || {}
-    // let counter = 0
-    // for (const taskList in tasks) {
-    //   counter += tasks[taskList].length
-    // }
-    // this.$store.commit('setCount', counter)
+    const storedTaskLists = localStorage.getItem('taskLists') || JSON.stringify([])
+    const taskLists = JSON.parse(storedTaskLists)
+    this.$store.commit('setTaskLists', taskLists)
+
+    let counter = 0
+    taskLists.forEach(function(taskList) {
+      counter += taskList.tasks.length
+    })
+
+    this.$store.commit('setCount', counter)
+
   }
 }
 </script>

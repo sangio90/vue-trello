@@ -49,6 +49,9 @@ const store = new Vuex.Store({
     setCount(state, count) {
       state.count = count
     },
+    setTaskLists(state, taskLists) {
+      state.taskLists = taskLists
+    },
     addTask(state, taskListName) {
       const indexOfSelectedTaskList = state.taskLists.findIndex(function(element) {
         return element.name === taskListName
