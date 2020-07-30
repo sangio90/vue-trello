@@ -7,7 +7,7 @@
             class="task"
             v-for="(task, index) in tasks"
             :key="index"
-            :task-id="task.taskId"
+            :task-id="task.id"
         />
 
         <br/>

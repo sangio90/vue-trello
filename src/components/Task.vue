@@ -1,7 +1,7 @@
 <template>
     <div>
         <input v-model="selected" type="checkbox"/>
-        <input :value="titolo" @keypress="updateTask"/>
+        <input v-model="titolo" @keypress="updateTask"/>
         <button @click="eliminaTask">Elimina</button>
         <button @click="salvaTask(taskId)">Salva</button>
     </div>
@@ -17,14 +17,15 @@
         },
         computed: {
             titolo () {
+                let titolo = ''
                 this.$store.state.taskLists.forEach((taskList) => {
                     taskList.tasks.forEach((task) => {
                         if (task.id === this.taskId) {
-                            return task.title
+                            titolo = task.title
                         }
                     })
                 });
-                return ''
+                return titolo
             }
         },
         props: {
