@@ -1,7 +1,7 @@
 <template>
     <div>
         <input v-model="selected" type="checkbox"/>
-        <input v-model="titolo"/>
+        <input :value="titolo" @keypress="updateTask"/>
         <button @click="eliminaTask">Elimina</button>
         <button @click="salvaTask(taskId)">Salva</button>
     </div>
@@ -12,33 +12,36 @@
         name: "Task",
         data () {
             return {
-                titolo: '',
                 selected: false
+            }
+        },
+        computed: {
+            titolo () {
+                this.$store.state.taskLists.forEach((taskList) => {
+                    taskList.tasks.forEach((task) => {
+                        if (task.id === this.taskId) {
+                            return task.title
+                        }
+                    })
+                });
+                return ''
             }
         },
         props: {
             taskId: {
                 type: Number,
                 default: 0
-            },
-            titoloIniziale: {
-                type: String,
-                default: ''
             }
         },
         methods: {
             eliminaTask () {
-                this.$emit('elimina', this.taskId)
-                this.$store.commit('removeTask', this.taskId)
+                this.$store.commit('deleteTask', this.taskId)
+                this.$store.commit('decrement')
             },
-            salvaTask () {
-                this.$emit('salva', this.taskId, this.titolo)
+            updateTask () {
+                console.log('here')
             }
-        },
-        mounted () {
-            this.titolo = this.titoloIniziale
         }
-
     }
 </script>
 

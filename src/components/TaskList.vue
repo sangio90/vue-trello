@@ -1,16 +1,13 @@
 <template>
     <div class="list" style="position: relative; min-height: 200px;">
-        <h2 style="margin-bottom: -5px; margin-top: 5px;">{{ title }}</h2>
+        <h2 style="margin-bottom: -5px; margin-top: 5px;">{{ name }}</h2>
         <hr>
         <p v-if="tasks.length === 0">Non sono presenti task</p>
         <task
             class="task"
             v-for="(task, index) in tasks"
-            @elimina="eliminaTask"
-            @salva="salvaTask"
             :key="index"
             :task-id="task.taskId"
-            :titolo-iniziale="task.titolo"
         />
 
         <br/>
@@ -26,59 +23,38 @@
             Task
         },
         props: {
-           title: {
+           name: {
                type: String,
                default: 'untitled'
            }
         },
-        data () {
-            return {
-                tasks: []
+        computed: {
+            tasks () {
+                const indexOfSelectedTaskList = this.taskLists.findIndex(function(element) {
+                    return element.name === this.name
+                }, this)
+                return this.taskLists[indexOfSelectedTaskList].tasks
+            },
+            taskLists () {
+                return this.$store.state.taskLists
             }
         },
         methods: {
             addTask () {
-                this.tasks.push({ taskId: this.getMaxId(), titolo: '' })
-                this.$store.commit('increment');
-            },
-            eliminaTask (taskId) {
-                const indexToDelete = this.tasks.findIndex(
-                    function(element) {
-                        return element.taskId === taskId
-                    })
-                this.tasks.splice(indexToDelete, 1)
-                this.updateLocalStorage()
-                this.$store.commit('decrement');
-            },
-            salvaTask (taskId, titolo) {
-                const task = { taskId: taskId, titolo: titolo }
-
-                let existingTaskIndex = this.tasks.findIndex(function(element) {
-                    return element.taskId === taskId
-                })
-                this.tasks[existingTaskIndex] = task
-                this.updateLocalStorage();
+                this.$store.commit('addTask', this.name)
+                this.$store.commit('increment')
             },
             updateLocalStorage() {
                 let allTasks = localStorage.getItem('tasks')
                 allTasks = JSON.parse(allTasks) || {}
                 allTasks[this.title] = this.tasks
                 localStorage.setItem('tasks', JSON.stringify(allTasks))
-            },
-            getMaxId () {
-                let maxId = 0;
-                this.tasks.forEach((task) => {
-                    if (task.taskId > maxId) {
-                        maxId = task.taskId
-                    }
-                });
-                return (maxId + 1)
-            },
+            }
         },
         created () {
-            let tasks = localStorage.getItem('tasks')
-            tasks = JSON.parse(tasks) || {}
-            this.tasks = tasks[this.title] || []
+            // let tasks = localStorage.getItem('tasks')
+            // tasks = JSON.parse(tasks) || {}
+            // this.tasks = tasks[this.title] || []
         }
     }
 </script>
