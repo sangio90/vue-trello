@@ -6,15 +6,18 @@
     </div>
     <br>
     <h3>In totale ci sono {{ counter }} task</h3>
+    <menu-task></menu-task>
   </div>
 </template>
 
 <script>
 import TaskList from "./components/TaskList";
+import MenuTask from "./components/MenuTask";
 export default {
   name: 'App',
   components: {
-    TaskList
+    TaskList,
+    MenuTask
   },
   methods: {
     stoSalvando () {

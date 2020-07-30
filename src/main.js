@@ -15,15 +15,18 @@ const store = new Vuex.Store({
         tasks: [
           {
             id: 1,
-            title: 'Comprare la frutta'
+            title: 'Comprare la frutta',
+            selected: false
           },
           {
             id: 2,
-            title: 'Mangiare la frutta'
+            title: 'Mangiare la frutta',
+            selected: false
           },
           {
             id: 3,
-            title: 'Espellere la frutta'
+            title: 'Espellere la frutta',
+            selected: false
           }
         ]
       },
@@ -33,7 +36,8 @@ const store = new Vuex.Store({
         tasks: [
           {
             id: 4,
-            title: 'Salvare la cheerleader'
+            title: 'Salvare la cheerleader',
+            selected: false
           }
         ]
       }
@@ -67,10 +71,12 @@ const store = new Vuex.Store({
     updateTask(state, options) {
       const id = options.id
       const title = options.title
+      const selected = options.selected
       state.taskLists.forEach((taskList) => {
         taskList.tasks.forEach((task) => {
           if (task.id === id) {
             task.title = title
+            task.selected = selected
           }
         })
       });

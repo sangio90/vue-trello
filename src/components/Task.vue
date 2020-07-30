@@ -10,13 +10,9 @@
 <script>
     export default {
         name: "Task",
-        data () {
-            return {
-                selected: false
-            }
-        },
         computed: {
             titolo:{
+                cache: false,
                 get () {
                     let titolo = ''
                     this.$store.state.taskLists.forEach((taskList) => {
@@ -31,7 +27,29 @@
                 set (newValue) {
                     this.$store.commit('updateTask', {
                         id: this.taskId,
+                        selected: this.selected,
                         title: newValue
+                    })
+                }
+            },
+            selected: {
+                cache: false,
+                get () {
+                    let selected = undefined
+                    this.$store.state.taskLists.forEach((taskList) => {
+                        taskList.tasks.forEach((task) => {
+                            if (task.id === this.taskId) {
+                                selected = task.selected
+                            }
+                        })
+                    });
+                    return selected
+                },
+                set (newValue) {
+                    this.$store.commit('updateTask', {
+                        id: this.taskId,
+                        title: this.titolo,
+                        selected: newValue
                     })
                 }
             }
